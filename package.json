@@ -1,0 +1,31 @@
+{
+  "name": "ai-receptionist-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+  "build": "tsc",
+  "start": "node dist/server.js",
+  "dev": "concurrently \"watch:build\" \"start:watch\"",
+  "watch:build": "tsc --watch",
+  "start:watch": "nodemon dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0",
+    "nodemon": "^3.1.9",
+    "openai": "^4.77.4",
+    "twilio": "^5.4.1"
+  }
+}
