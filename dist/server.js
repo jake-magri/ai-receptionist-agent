@@ -27,6 +27,15 @@ app.post('/voice', (_req, res) => {
         voiceResponse.say('Please wait while we connect your call to the AI voice assistant.');
         voiceResponse.pause({ length: 1 });
         voiceResponse.say('You can start speaking now.');
+        // Use Gather to collect user input
+        voiceResponse.gather({
+            input: ['speech', 'dtmf'], // Capture speech input
+            timeout: 10, // Wait for 10 seconds of silence
+            speechTimeout: 'auto', // Automatically stop listening when no speech is detected
+            action: '/handle-user-response', // Endpoint to handle response after gathering input
+        });
+        // If no input is received, redirect to the same route to prompt again
+        voiceResponse.redirect('/voice');
         // Log the TwiML response for debugging
         console.log(voiceResponse.toString());
         res.type('text/xml'); // Set the response type to XML
