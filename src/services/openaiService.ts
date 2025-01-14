@@ -1,17 +1,27 @@
-// import { Configuration, OpenAIApi } from 'openai';
+import { ChatOpenAI } from '@langchain/openai';
+import dotenv from 'dotenv';
 
-// const configuration = new Configuration({
-//   apiKey: process.env.OPENAI_API_KEY,
-// });
-// const openai = new OpenAIApi(configuration);
+dotenv.config();
 
-// export const processSpeech = async (speechText: string): Promise<string> => {
-//   const response = await openai.createCompletion({
-//     model: 'text-davinci-003',
-//     prompt: `Determine the intent of the following speech: "${speechText}"`,
-//     max_tokens: 50,
-//   });
+// Initialize OpenAI client
+const openai = new ChatOpenAI({
+    model: 'gpt-3.5-turbo',
+    apiKey: process.env.OPENAI_API_KEY || '',
+  });
 
-//   const intent = response.data.choices[0].text.trim();
-//   return intent;
-// };
+// Process speech and determine intent
+export const processSpeech = async (speechText: string): Promise<string> => {
+  try {
+    const response = await openai.invoke([
+        { role: 'system', content: 'You are an AI Dental Receptionist.' },
+        { role: 'user', content: speechText },
+      ]);
+
+    // Extract the content from the response
+    const content = response.content.toString() || "I'm sorry, can you please clarify?";
+    return content;
+  } catch (error) {
+    console.error('Error processing speech:', error);
+    throw new Error('Failed to process speech.');
+  }
+};

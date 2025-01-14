@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import pkg from 'twilio';
 import { WebSocketServer, WebSocket } from 'ws';
 import base64 from 'base-64';
+import voiceAssistantRouter from './routes/index.js'; // Import the router
 dotenv.config();
 // Configuration
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -19,7 +20,10 @@ if (!OPENAI_API_KEY) {
 const { twiml } = pkg;
 // Create Express app
 const app = express();
-app.use(express.json());
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+// Use the imported router
+app.use('/', voiceAssistantRouter); // Attach the router here
 // Endpoint to handle incoming voice calls
 app.post('/voice', (_req, res) => {
     try {
@@ -32,7 +36,7 @@ app.post('/voice', (_req, res) => {
             input: ['speech', 'dtmf'], // Capture speech input
             timeout: 10, // Wait for 10 seconds of silence
             speechTimeout: 'auto', // Automatically stop listening when no speech is detected
-            action: '/handle-user-response', // Endpoint to handle response after gathering input
+            action: '/handle-call', // Endpoint to handle response after gathering input
         });
         // If no input is received, redirect to the same route to prompt again
         voiceResponse.redirect('/voice');
