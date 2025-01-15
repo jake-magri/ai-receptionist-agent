@@ -40,10 +40,8 @@ export const handleCall = async (req: Request, res: Response) => {
       action: '/handle-call?loopback=true', // Loop back to this endpoint and flag as loopback
     });
 
-    // Send the TwiML response to Twilio
-    res.type('text/xml');  // Twilio expects XML
-    res.send(voiceResponse.toString());  // Send the TwiML response as XML
-
+    // Process the intent and take action
+    
     // switch (intent) {
     //   case 'schedule_appointment':
     //     await createAppointment(intent.details);
@@ -52,6 +50,11 @@ export const handleCall = async (req: Request, res: Response) => {
     //   default:
     //     res.send('Sorry, I did not understand that.');
     // }
+
+    // Send the TwiML response to Twilio
+    res.type('text/xml');  // Twilio expects XML
+    res.send(voiceResponse.toString());  // Send the TwiML response as XML
+
   } catch (error) {
     console.error('Error processing the call:', error);
     res.status(500).send('An error occurred.');
